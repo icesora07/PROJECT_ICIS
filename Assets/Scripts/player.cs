@@ -5,15 +5,18 @@ public class Player : MonoBehaviour
 {
     private CharacterController cc;
 
+    // [Header("추적 대상")]
+    // [SerializeField] private Transform target;
+
     [Header("이동 설정")]
     [SerializeField] private float moveSpeed = 5f;
 
-    [Header("중력 설정")]
-    [SerializeField] private float gravity = -20f;
-    // 음수인 이유: 아래 방향(-y)으로 계속 당겨야 하기 때문
-    // -9.8이 현실 중력이지만 게임은 더 강해야 자연스러움
+    [Header("점프 설정")]
+    [SerializeField] private float jumpSpeed = 30f;
 
-    private Vector2 moveInput;
+    [Header("중력 설정")]
+    [SerializeField] private float gravity = -9.8f;
+    private Vector3 moveInput;
 
     // velocity = 현재 속도
     // 주로 y축(중력/점프) 계산에 사용
@@ -44,16 +47,16 @@ public class Player : MonoBehaviour
         if (Keyboard.current.aKey.isPressed) moveX = -1f;
         if (Keyboard.current.dKey.isPressed) moveX =  1f;
 
-        float moveY = 0f;
-        if (Keyboard.current.sKey.isPressed) moveY = -1f;
-        if (Keyboard.current.wKey.isPressed) moveY =  1f;
+        float moveZ = 0f;
+        if (Keyboard.current.sKey.isPressed) moveZ = -1f;
+        if (Keyboard.current.wKey.isPressed) moveZ =  1f;
 
-        moveInput = new Vector2(moveX, moveY);
+        moveInput = new Vector3(moveX, 0f, moveZ);
     }
 
     void Move()
     {
-        Vector3 moveDir = new Vector3(moveInput.x, 0f, moveInput.y);
+        Vector3 moveDir = new Vector3(moveInput.x, 0f, moveInput.z);
         cc.Move(moveDir * moveSpeed * Time.deltaTime);
     }
 
@@ -63,7 +66,7 @@ public class Player : MonoBehaviour
         // cc.isGrounded = CharacterController가 자동으로 바닥 감지해주는 값
         if (cc.isGrounded && velocity.y < 0f)
         {
-            velocity.y = -2f;
+            velocity.y = -0.1f;
             // 0f가 아닌 -2f인 이유:
             // 완전히 0으로 만들면 isGrounded가 간헐적으로 false로 인식하는 버그 있음
             // 살짝 음수 유지 = "확실히 바닥에 붙어있음"을 보장하는 트릭
