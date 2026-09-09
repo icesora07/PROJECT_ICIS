@@ -12,10 +12,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
 
     [Header("점프 설정")]
-    [SerializeField] private float jumpSpeed = 30f;
+    [SerializeField] private float jumpSpeed = 10f;
 
     [Header("중력 설정")]
-    [SerializeField] private float gravity = -9.8f;
+    [SerializeField] private float gravity = -25f;
     private Vector3 moveInput;
 
     // velocity = 현재 속도
@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
 
         if (cc == null)
         {
-            Debug.LogError("CharacterController가 없어요!");
+            Debug.LogError("N.F CharacterController");
             enabled = false;
             return;
         }
@@ -38,7 +38,6 @@ public class Player : MonoBehaviour
     {
         GetInput();
         Move();
-        ApplyGravity(); // 중력 추가
     }
 
     void GetInput()
@@ -51,6 +50,8 @@ public class Player : MonoBehaviour
         if (Keyboard.current.sKey.isPressed) moveZ = -1f;
         if (Keyboard.current.wKey.isPressed) moveZ =  1f;
 
+        if (cc.isGrounded && velocity.y <= 0f && Keyboard.current.spaceKey.isPressed) velocity.y = jumpSpeed;
+
         moveInput = new Vector3(moveX, 0f, moveZ);
     }
 
@@ -58,20 +59,12 @@ public class Player : MonoBehaviour
     {
         Vector3 moveDir = new Vector3(moveInput.x, 0f, moveInput.z);
         cc.Move(moveDir * moveSpeed * Time.deltaTime);
-    }
 
-    void ApplyGravity()
-    {
         // 바닥에 닿아있으면 중력 누적 초기화
         // cc.isGrounded = CharacterController가 자동으로 바닥 감지해주는 값
-        if (cc.isGrounded && velocity.y < 0f)
-        {
-            velocity.y = -0.1f;
-            // 0f가 아닌 -2f인 이유:
-            // 완전히 0으로 만들면 isGrounded가 간헐적으로 false로 인식하는 버그 있음
-            // 살짝 음수 유지 = "확실히 바닥에 붙어있음"을 보장하는 트릭
-        }
-
+        // 살짝 음수 유지 = "확실히 바닥에 붙어있음"을 보장
+        if (cc.isGrounded && velocity.y <= 0f) velocity.y = -1f;
+        
         // 매 프레임마다 중력을 누적 (점점 빠르게 떨어지는 효과)
         velocity.y += gravity * Time.deltaTime;
 
