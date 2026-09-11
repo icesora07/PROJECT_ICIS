@@ -207,7 +207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15212344, y: 0, z: 0, w: 0.98836154}
+  m_LocalRotation: {x: 0.15212338, y: 0, z: 0, w: 0.98836154}
   m_LocalPosition: {x: 0, y: 12.405646, z: -7.6297355}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -633,7 +633,7 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-        Gain: 8
+        Gain: 14
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -644,7 +644,7 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-        Gain: 6
+        Gain: -8
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -777,7 +777,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124375383}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15212344, y: 0, z: 0, w: 0.98836154}
+  m_LocalRotation: {x: 0.15212338, y: 0, z: 0, w: 0.98836154}
   m_LocalPosition: {x: 0, y: 12.405646, z: -7.6297355}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -949,6 +949,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   moveSpeed: 5
+  runSpeed: 8
   jumpSpeed: 10
   gravity: -25
 --- !u!1660057539 &9223372036854775807
