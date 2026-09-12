@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour {
@@ -42,8 +43,9 @@ public class Player : MonoBehaviour {
         cameraRight.y = 0f;
         cameraForward.Normalize();
         cameraRight.Normalize();
-        // Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 10f, Color.red);
+        Debug.DrawRay(cc.transform.position, new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z) * 7f, Color.blue);
         Debug.DrawRay(cc.transform.position, cc.transform.forward * 5f, Color.red);
+        Debug.Log(cc.transform.forward);
 
         float moveX = 0f;
         float moveZ = 0f;
@@ -72,7 +74,10 @@ public class Player : MonoBehaviour {
             velocity.x = moveDir.x * currentSpeed;
             velocity.z = moveDir.z * currentSpeed;
             
-            cc.transform.forward = new Vector3(velocity.x, 0f, velocity.z);
+            if (cc.transform.forward != new Vector3(velocity.x, 0f, velocity.z)) {
+                Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+                cc.transform.rotation = Quaternion.RotateTowards(cc.transform.rotation, targetRotation, 1000f * Time.deltaTime);
+            }
         }
         else {
             velocity.x = 0f;
