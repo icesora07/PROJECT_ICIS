@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour {
@@ -60,20 +62,27 @@ public class Player : MonoBehaviour {
         Vector3 moveDir = new Vector3(moveInput.x, 0f, moveInput.z);
         velocity.x = moveDir.x;
         velocity.z = moveDir.z;
-        
-        if (Keyboard.current.shiftKey.isPressed) cc.Move(moveDir * runSpeed * Time.deltaTime);
-        else cc.Move(moveDir * moveSpeed * Time.deltaTime);
-        // 바닥에 닿아있으면 중력 누적 초기화
-        // cc.isGrounded = CharacterController가 자동으로 바닥 감지해주는 값
-        // 살짝 음수 유지 = "확실히 바닥에 붙어있음"을 보장
+
+        float currentSpeed;
+
+        if (Keyboard.current.shiftKey.isPressed) currentSpeed = runSpeed;
+        else currentSpeed = moveSpeed;
+
+        if (moveDir.sqrMagnitude > 0.01f) {
+            velocity.x = moveDir.x * currentSpeed;
+            velocity.z = moveDir.z * currentSpeed;
+            
+            cc.transform.forward = new Vector3(velocity.x, 0f, velocity.z);
+        }
+        else {
+            velocity.x = 0f;
+            velocity.z = 0f;
+        }
+
         if (cc.isGrounded && velocity.y <= 0f) velocity.y = -1f;
-        
-        // 매 프레임마다 중력을 누적 (점점 빠르게 떨어지는 효과)
         velocity.y += gravity * Time.deltaTime;
 
-        cc.transform.forward = new Vector3(velocity.x, 0f, velocity.z);
 
-        // 계산된 속도로 실제 이동 적용
         cc.Move(velocity * Time.deltaTime);
     }
 }
